@@ -69,6 +69,12 @@ function online_SuspendAccount($params) {
 	{
         call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>'ubuntu-12.04_amd64')); //Boots into rescue mode
 	}
+	//Add an entry to the todo list field to notify the administrators (optional and can be removed)
+$table = "tbltodolist";
+$values = array("title"=>"ONLINE.NET - Service Suspension","description"=>"Service ID # " . $params["serviceid"] ." was suspended.","status"=>"Pending");
+$newid = insert_query($table,$values);
+//End add an entry
+
     return "success"; //Mission complete
 }
 
