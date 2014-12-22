@@ -18,4 +18,4 @@ After uploading the files required for the module to operate, open your administ
 Support
 ================
 
-If you notice bugs or something wrong, you may feel free to report the issue by clicking [here](https://github.com/Verelox/onlinenet-module/issues/new).
+If you notice bugs or something wrong, you may feel free to report the issue by clicking [here](https://github.com/Verelox/onlinenet-module/issues/new). You may follow the same link if you would like to suggest a feature that you would like to see in the next release, too!
