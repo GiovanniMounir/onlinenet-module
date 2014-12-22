@@ -1,0 +1,86 @@
+/*
+Copyright (c) 2014 Verelox
+Developed by Giovanni Mounir (@GiovanniMounir on GitHub), James Daniel(@daeneeil on GitHub) and Erikku Nakahara(yam0r1). Not affiliated with online.net.
+This is an open source project available under the MIT license.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+*/
+
+.whmcscontainer .moduleoutput {
+margin: 20px 0 20px 0;
+padding: 0px;
+text-align: left;
+width: 100%;
+border: 0px;
+-moz-border-radius: 0px;
+-webkit-border-radius: 0px;
+-o-border-radius: 0px;
+border-radius: 0px;
+}
+.nav-stacked{
+float: left;
+}
+.ccontent{
+margin-left:150px;
+}
+.ccontent p{
+font-size: 14px;
+}
+.btn-control {
+font-size: 11px;
+}
+div.alert-message {
+padding: 8px 35px 8px 14px;
+margin-bottom: 20px;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+background-color: #fcf8e3;
+border: 1px solid #fcf8e3;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+div.alert-message p {
+margin: 0px;
+}
+div.alert-message.success {
+background-color: #eff7eb;
+border-color: #eff7eb;
+color: #468847;
+}
+div.alert-message.warning {
+background-color: #e3b000;
+color: #fff;
+text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
+}
+div.alert-message.warning .box-icon {
+background-position: -88px -8px;
+}
+div.alert-message.error {
+background-color: #c60f13;
+color: #fff;
+text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
+}
+div.alert-message.error .box-icon {
+background-position: -128px -8px;
+}
+div.alert-message a.close {
+position: relative;
+top: -2px;
+right: -21px;
+line-height: 20px;
+}
+div.alert-message a.close:hover, div.alert-box a.close:focus {
+opacity: 0.4;
+}
+/*!
+ *  Font Awesome 4.2.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ */@font-face{font-family:'FontAwesome';src:url('/modules/servers/online/fonts/fontawesome-webfont.eot?v=4.2.0');src:url('/modules/servers/online/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0') format('embedded-opentype'),url('/modules/servers/online/fonts/fontawesome-webfont.woff?v=4.2.0') format('woff'),url('/modules/servers/online/fonts/fontawesome-webfont.ttf?v=4.2.0') format('truetype'),url('/modules/servers/online/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');font-weight:normal;font-style:normal}.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.fa-lg{font-size:1.33333333em;line-height:.75em;vertical-align:-15%}.fa-2x{font-size:2em}.fa-3x{font-size:3em}.fa-4x{font-size:4em}.fa-5x{font-size:5em}.fa-fw{width:1.28571429em;text-align:center}.fa-ul{padding-left:0;margin-left:2.14285714em;list-style-type:none}.fa-ul>li{position:relative}.fa-li{position:absolute;left:-2.14285714em;width:2.14285714em;top:.14285714em;text-align:center}.fa-li.fa-lg{left:-1.85714286em}.fa-border{padding:.2em .25em .15em;border:solid .08em #eee;border-radius:.1em}.fa-spin{-webkit-animation:fa-spin 2s infinite linear;animation:fa-spin 2s infinite linear}@-webkit-keyframes fa-spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}@keyframes fa-spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}.fa-refresh:before{content:"\f021"}
