@@ -14,7 +14,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 */
-function bytesToSize($bytes, $precision = 2)
+function online_bytesToSize($bytes, $precision = 2)
 {  
 //Converts bytes to a human readable size. Copied from stackoverflow
 
@@ -541,7 +541,7 @@ else if ($_GET['b'] == "raid") //Proceed if the selected menu item is RAID
         }
         else
 		{
-            $hwdiskinfo['capacity'] = bytesToSize($hwdiskinfo['capacity'] * 1048576); //Convert the size to bytes, and then convert it to a human readable size
+            $hwdiskinfo['capacity'] = online_bytesToSize($hwdiskinfo['capacity'] * 1048576); //Convert the size to bytes, and then convert it to a human readable size
 		}
 		//Output the information to the user
         $raid .= "<tr><td>". $hwdiskinfo['id']."</td><td>".$hwdiskinfo['connector']."</td><td>".$hwdiskinfo['type']."</td><td>".$hwdiskinfo['capacity']."</td><td>".$currentraidlevel."</td></tr>";
