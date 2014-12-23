@@ -47,10 +47,12 @@ function online_TerminateAccount($params) {
     $server = $params["server"]; //Check if the service is linked to a server
     $serverid = $params["serverusername"]; //Get the server ID from the username field
     $token = $params["serveraccesshash"]; //This is online.net's API private token for the user owning the dedicated server, retrieve it from server access hash field
+	
 	if ($server) //Proceed if linked to a server
 	{
         call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>'ubuntu-12.04_amd64')); //Boots into rescue mode
 	}
+	
 //Add an entry to the todo list field to notify the administrators (optional and can be removed)
 $table = "tbltodolist";
 $values = array("title"=>"ONLINE.NET - Service Termination","description"=>"Service ID # " . $params["serviceid"] ." requires termination.","status"=>"Pending");
@@ -97,6 +99,7 @@ $token = $params["serveraccesshash"]; //This is online.net's API private token f
 // -- start state --
 if ($_GET['b'] == "state" || empty($_GET['b'])) //Proceed if the selected menu item is State or there is no selected menu item
 {
+
 $serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Retrieve the infortmation we have for this server ID from the API (Power State, OS, etc)
 $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve the rescue images available for this server ID from the API (ubuntu, Windows PE, etc)
 $decodedinfo = (array) $serverinfo; //Convert the retrieved server data to an array: The API passes it as an stdObject
@@ -105,7 +108,7 @@ $rescuecreds = (array) $decodedinfo["rescue_credentials"]; //Get the rescue cred
 
 if (!empty($_POST['rescue_image'])) //Proceed if the user requested to start a new rescue session
 {
-    $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>$_POST['rescue_image']))); //Start a rescue session with the selected image
+    $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>htmlentities(strip_tags($_POST['rescue_image']))))); //Start a rescue session with the selected image
     $message = "<div class='alert-message success'><p>Your server has successfully booted into rescue mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
 }
 else if (!empty($_POST['normal_mode'])) //Proceed if the user requested to boot into normal mode
@@ -115,7 +118,7 @@ else if (!empty($_POST['normal_mode'])) //Proceed if the user requested to boot 
 }
 else if (!empty($_POST['hostname'])) //Proceed if the user requested to change their hostname
 {
-    if (call_online_api($token, 'PUT', '/server/'.$params["serverusername"],null,array('hostname'=>$_POST['hostname'])) == "true") //Proceed if the requested hostname is accepted
+    if (call_online_api($token, 'PUT', '/server/'.$params["serverusername"],null,array('hostname'=>htmlentities(strip_tags($_POST['hostname'])))) == "true") //Proceed if the requested hostname is accepted
 	{
         $message = "<div class='alert-message success'><p>Your hostname has been successfully updated.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
 	}
@@ -206,7 +209,7 @@ else if ($decodedinfo["boot_mode"] == "rescue") //Proceed if the boot mode is re
 // --- end state ---
  
 // --- start remote ---
-if ($_GET['b'] == "remote") //Proceed if the selected menu item is remote
+else if ($_GET['b'] == "remote") //Proceed if the selected menu item is remote
 { 
 $serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Get the server info
 $decodedinfo = (array) $serverinfo; //Convert to an array
@@ -216,7 +219,7 @@ if (!empty($_POST['remoteip'])) //Proceed if the user has requested to start a r
 {
     if (empty($session)) //Proceed if there's no remote session running
     {
-        $remotesession = json_decode(call_online_api($token, 'POST', '/server/bmc/session', null, array('server_id'=>$params['serverusername'], 'ip' => $_POST['remoteip']))); //Send the command to the api to start the session
+        $remotesession = json_decode(call_online_api($token, 'POST', '/server/bmc/session', null, array('server_id'=>$params['serverusername'], 'ip' => htmlentities(strip_tags($_POST['remoteip']))))); //Send the command to the api to start the session
         $message = "<div class='alert-message success'><p>The remote session is being opened.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
     }
     else
@@ -264,7 +267,7 @@ else if (!empty($session)) //Otherwise, show the remote session credentials
  
 // -- start network --
  
-if ($_GET['b'] == "network"){ 
+else if ($_GET['b'] == "network"){ 
 
 $serverinfo = (array) json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Retrieve the server details
 $net = (array) $serverinfo["ip"]; //Get the network details
@@ -287,7 +290,7 @@ else if ($_POST['vmactype'] && !empty($_SESSION['ipmac'])) //Proceed if requeste
 {
     $request =json_decode(call_online_api($token, 'POST', '/server/failover/generateMac', null, array(
 	 "address" => $_SESSION['ipmac'],
-	 "type" => $_POST['vmactype']))); //Forward the command to the API
+	 "type" => htmlentities(strip_tags($_POST['vmactype']))))); //Forward the command to the API
     $message = "<div class='alert-message success'><p>The MAC address was successfully generated.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
     unset($_SESSION['ipmac']); //Remove the selected IP from the session
 }
@@ -297,7 +300,7 @@ else if (!empty($_POST['ipfrom']) && !empty($_SESSION['ipmac'])) //Proceed if th
     for ($i = 0; $i < count($net); $i++) //Loop through the data
 	{
         $ipnetwork = (array)$net[$i]; //Convert to array
-        if ($ipnetwork['address'] == $_POST['ipfrom']) //Proceed if the user owns the IP they want to copy its MAC address
+        if ($ipnetwork['address'] == htmlentities(strip_tags($_POST['ipfrom']))) //Proceed if the user owns the IP they want to copy its MAC address
 		{ 
             $valid = true; //Set valid to true
             break; //Stop looping, we found what we wanted
@@ -307,7 +310,7 @@ else if (!empty($_POST['ipfrom']) && !empty($_SESSION['ipmac'])) //Proceed if th
     {
         $request = json_decode(call_online_api($token, 'POST', '/server/failover/duplicateMac', null, array(
 	    "target" => $_SESSION['ipmac'],
-	    "address" => $_POST['ipfrom']))); //Send the command to the api
+	    "address" => htmlentities(strip_tags($_POST['ipfrom']))))); //Send the command to the api
         if ($request === true) //Proceed if the command succeeded
         {
             $message = "<div class='alert-message success'><p>The MAC address was successfully duplicated.<a href='#' class='close'>&times;</a></p></div>";
@@ -346,7 +349,7 @@ else if ($_POST['removevmac'] && !empty($_SESSION['ipmac'])) //Proceed if a requ
         for ($i = 0; $i < count($net); $i++) //Loop through the network data
 		{
             $ipnetwork = (array)$net[$i]; //Convert to array
-            if ($ipnetwork['address'] == $_GET['ip']) //Proceed if the user owns this IP address
+            if ($ipnetwork['address'] == htmlentities(strip_tags($_GET['ip']))) //Proceed if the user owns this IP address
             {			
                 $currentreverse = $ipnetwork['reverse']; //Get the current reverse for this IP address
                 $valid = true; //Set valid to true
@@ -355,8 +358,8 @@ else if ($_POST['removevmac'] && !empty($_SESSION['ipmac'])) //Proceed if a requ
         }
         if ($valid) //Proceed if the user owns this IP address
 		{
-            $_SESSION['ipreverse'] = $_GET['ip']; //Save the ipreverse for the POST request - we don't want this to be hijacked, so we don't use the "hidden" fields (notice the quotes)
-            $network .= "<h3>Edit reverses</h3><hr style='width:50%;'><p>Please enter the new reverse for <b>". htmlentities($_GET['ip']) ."</b>: <form method='post' class='form-horizontal'><input type='text' value='" . $currentreverse."' name='reverse'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form></p><hr style='width:50%;'>";
+            $_SESSION['ipreverse'] = htmlentities(strip_tags($_GET['ip'])); //Save the ipreverse for the POST request - we don't want this to be hijacked, so we don't use the "hidden" fields (notice the quotes)
+            $network .= "<h3>Edit reverses</h3><hr style='width:50%;'><p>Please enter the new reverse for <b>". htmlentities(strip_tags($_GET['ip'])) ."</b>: <form method='post' class='form-horizontal'><input type='text' value='" . $currentreverse."' name='reverse'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form></p><hr style='width:50%;'>";
 		}
     }
 	
@@ -367,7 +370,7 @@ if ($_GET['c'] == "editmac" && !empty($_GET['ip'])) //Proceed if a request to ed
     for ($i = 0; $i < count($net); $i++) //Loop through the network data
 	{
         $ipnetwork = (array)$net[$i]; //Convert to arary
-        if ($ipnetwork['address'] == $_GET['ip']) //Proceed if the user owns this IP address
+        if ($ipnetwork['address'] == htmlentities(strip_tags($_GET['ip']))) //Proceed if the user owns this IP address
 		{ 
             $currentmac = $ipnetwork['mac']; //Save the current mac value, we will use it later when outputting the form
             $valid = true; //Set valid to true
@@ -376,7 +379,7 @@ if ($_GET['c'] == "editmac" && !empty($_GET['ip'])) //Proceed if a request to ed
     }
     if ($valid) //Proceed if the user owns this IP address
     {
-        $_SESSION['ipmac'] = $_GET['ip']; //Save the IP address
+        $_SESSION['ipmac'] = htmlentities(strip_tags($_GET['ip'])); //Save the IP address
         if (empty($currentmac)) //Proceed if the MAC address is empty (i.e no mac address)
 		{
             $network .= "<h3>Edit virtual MAC</h3><hr style='width:50%;'><p>You are editing the virutal MAC for <b>". htmlentities(strip_tags($_SESSION['ipmac'])) ."</b>. There's no virtual MAC associated with this IP address yet. To generate a new virtual MAC, please select its type:</p> <form method='post' class='form-horizontal'> <select name='vmactype' style='width:100%'><option value='vmware'>VMWare</option><option value='xen'>XEN</option><option value='kvm'>KVM</option></select><br><br><input type='submit' value='Generate' class='btn btn-primary'></input> ";
@@ -448,7 +451,7 @@ $network .= "
  // -- end network -- 
  
  // -- start raid --
-if ($_GET['b'] == "raid") //Proceed if the selected menu item is RAID
+else if ($_GET['b'] == "raid") //Proceed if the selected menu item is RAID
 {
     $raidsupport = false; //This will be the value we use to check wheter RAID is supported for this service or not 
     $serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Get the server data from the api
@@ -525,8 +528,119 @@ if (!$raidsupport) //Proceed if there's no raid support
     $raid = "<br><p>RAID is not supported for this service.</p>"; //Inform the user that there's no RAID support for this service
 }
 }
- // -- end raid --
+
+// -- end raid --
  
+else //Proceed if the menu item is not known
+{
+$_GET['b'] = "state"; //Set the menu item to 'state'
+
+// -- start sate --
+$serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Retrieve the infortmation we have for this server ID from the API (Power State, OS, etc)
+$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve the rescue images available for this server ID from the API (ubuntu, Windows PE, etc)
+$decodedinfo = (array) $serverinfo; //Convert the retrieved server data to an array: The API passes it as an stdObject
+$osinfo = (array) $decodedinfo["os"]; //Convert the retrieved rescue images data to an array: The API passes it as an stdObject
+$rescuecreds = (array) $decodedinfo["rescue_credentials"]; //Get the rescue credentials from the server info, if any
+
+if (!empty($_POST['rescue_image'])) //Proceed if the user requested to start a new rescue session
+{
+    $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>htmlentities(strip_tags($_POST['rescue_image']))))); //Start a rescue session with the selected image
+    $message = "<div class='alert-message success'><p>Your server has successfully booted into rescue mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
+}
+else if (!empty($_POST['normal_mode'])) //Proceed if the user requested to boot into normal mode
+{
+    call_online_api($token, 'POST', '/server/boot/normal/'.$params["serverusername"],null,array('server_id'=>$params["serverusername"])); //Boots into normal mode
+    $message = "<div class='alert-message success'><p>Your server has successfully booted into normal mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
+}
+else if (!empty($_POST['hostname'])) //Proceed if the user requested to change their hostname
+{
+    if (call_online_api($token, 'PUT', '/server/'.$params["serverusername"],null,array('hostname'=>htmlentities(strip_tags($_POST['hostname'])))) == "true") //Proceed if the requested hostname is accepted
+	{
+        $message = "<div class='alert-message success'><p>Your hostname has been successfully updated.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
+	}
+	else
+	{
+	    $message = "<div class='alert-message error'><p>Hostname can only contain alphanumeric characters and hyphens but it cannot start or end with a hyphen.<a href='#' class='close'>&times;</a></p></div>"; //The hostname is not accepted, show this message
+	}
+}
+else if (!empty($_POST['reboot'])) //Proceed if the user requested to reboot their server
+{
+    if (call_online_api($token, 'POST', '/server/reboot/'.$params["serverusername"])) //Send the reboot command then proceed if the command succeeded
+	{
+        $message = "<div class='alert-message success'><p>The server is being rebooted.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
+	}
+	else
+	{
+	    $message = "<div class='alert-message error'><p>Something went wrong. The operation was cancelled.<a href='#' class='close'>&times;</a></p></div>"; //Show this message, the command failed
+	}
+}
+
+//Resynchronize - retrieve the same data again
+$serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"]));
+$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]));
+$decodedinfo = (array) $serverinfo;
+$osinfo = (array) $decodedinfo["os"];
+$rescuecreds = (array) $decodedinfo["rescue_credentials"];
+//End resynchronize
+
+if(file_exists("modules/servers/online/img/".$osinfo["name"].".png")) //Proceed if there's a PNG image for the operating system name
+{
+    $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='/modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
+}
+$hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
+
+if ($decodedinfo["boot_mode"] == "normal") //Proceed only if the current state is normal boot
+{
+    $rescue = "<h3>Boot into rescue mode</h3><hr style='width:50%;'><p>Please select the rescue image you would like to boot into: <form method='post' class='form-horizontal'><select style='width:100%' name='rescue_image'>";
+    foreach($rescueinfo as $value) //Retrieve the available rescue images and show them into a dropdown field
+	{
+	    //Replace the values with a human readable values
+        $hvalue = str_replace("-", " ", $value);
+        $hvalue = str_replace("_", " ", $hvalue);
+        $hvalue = str_replace("winpe", "Windows PE", $hvalue);
+        $hvalue = str_replace("ubuntu", "Ubuntu", $hvalue);
+		//Append the human readable valuable to the dropdown field
+        $rescue .= "<option value='".$value."'>".$hvalue."</option>";
+    }
+    $rescue .= "</select><br><br><input style='margin-left:5px;' type='submit' value='Boot' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //Give the user the option to submit the form
+}
+else //Proceed if the current state is not normal boot
+{
+    $rescue = "<h3>Boot into rescue mode</h3><hr style='width:50%;'><p>The system is now running under a rescue image.</p><br><form method='post'><input type='submit' name='normal_mode' class='btn btn-primary' value='Boot into normal mode'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form><hr style='width:50%;'>"; //Notify the user that a rescue session is already running
+}
+
+$state = "<p><b>Operating System</b>: " . $osimage . ucfirst($osinfo["name"]) . " " . $osinfo["version"] . "</p>"; //Append the operating system name and version
+$state .= "<p><b>Hostname</b>: " . $decodedinfo["hostname"]; //Append the hostname
+
+if ($_GET['c'] != "hostname") //Proceed if the user did not request to change their hostname
+{
+    $state .= " <a class='btn btn-mini' href='/clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=hostname'>Change</a></p>"; //Show a change button next to the hostname
+}
+else //Proceed if the user requested to change their hostname
+{
+    $state .= "</p>"; //End the paragraph: don't show a button next to the hostname
+}
+$state .= "<p><b>Boot Mode</b>: " . ucfirst($decodedinfo["boot_mode"]); //Append the boot mode: whether it's normal or rescue
+
+if ($decodedinfo["boot_mode"] == "normal" && $_GET['c'] != "rescue") //Proceed if the boot mode is normal and the user did not request to boot into rescue
+{
+    $state .= " <a class='btn btn-mini' href='/clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=rescue'>Rescue</a></p>"; //Show a rescue button next to the mode
+    $state .= "<p><b>Last Reboot</b>: " . str_replace(".000Z", "", str_replace("T", " ", $decodedinfo["last_reboot"])); //Show when the server was last reooted
+    $state .= "<br><br><p><form method='post'><input type='submit' name='reboot' class='btn btn-danger' value='Reboot'></input></form></p>"; //Give the user the option to reboot their server
+}
+else if ($decodedinfo["boot_mode"] == "rescue") //Proceed if the boot mode is rescue
+{
+    if ($rescuecreds["protocol"] == "vnc") //Proceed if the user has selected a Windows image for the rescue mode
+    {
+        $port = "<p><b>Port</b>: VNC</p>"; //Show that the port is not 22, but VNC (I don't have a clue which port that is, probably 5900/5901)
+    }
+    else
+	{
+        $port = "<p><b>Port</b>: 22</p><p><b>Username</b>: " . $rescuecreds["login"] . "</p>"; //Show port 22 if it's not VNC, and show the username (VNC doesn't need a username)
+    }
+    $state .="<br><br><h3>&mdash; Rescue SSH Details &mdash;</h3><br><p><b>IP Address</b>: " . $rescuecreds["ip"] . "</p>".$port."<p><b>Password</b>: ". $rescuecreds["password"] ."</p><br><b>Note</b>: Please use the command <code>sudo su</code> to gain access to the root account after logging into the system with the above details.<form method='post'><br><input type='submit' name='normal_mode' class='btn btn-primary' value='Boot into normal mode'></input></form>"; //Show the rescue credentials and give the option to boot into normal mode
+}
+}
  return array(
         'vars' => array(
             'srvid' => $params['serviceid'],
