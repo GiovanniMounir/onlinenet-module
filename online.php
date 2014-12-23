@@ -108,8 +108,24 @@ $rescuecreds = (array) $decodedinfo["rescue_credentials"]; //Get the rescue cred
 
 if (!empty($_POST['rescue_image'])) //Proceed if the user requested to start a new rescue session
 {
-    $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>htmlentities(strip_tags($_POST['rescue_image']))))); //Start a rescue session with the selected image
-    $message = "<div class='alert-message success'><p>Your server has successfully booted into rescue mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
+    $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve available rescue images
+	$valid = false; //This will be used to validate the rescue image requested
+    foreach($rescueinfo as $value) //Retrieve the available rescue images and show them into a dropdown field
+	{
+	    if ($value == $_POST['rescue_image']) //Proceed if the rescue image is found within the available rescue images
+		{
+		    $valid = true; //Set valid to true
+		}
+	}
+	if ($valid) //Proceed if the rescue image is found within the available rescue images
+	{
+        $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>htmlentities(strip_tags($_POST['rescue_image']))))); //Start a rescue session with the selected image
+        $message = "<div class='alert-message success'><p>Your server has successfully booted into rescue mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
+    }
+	else
+	{
+	    $message = "<div class='alert-message error'><p>The rescue image you have selected is invalid. If the problem continutes, please notify support.<a href='#' class='close'>&times;</a></p></div>";
+	}
 }
 else if (!empty($_POST['normal_mode'])) //Proceed if the user requested to boot into normal mode
 {
@@ -219,9 +235,16 @@ if (!empty($_POST['remoteip'])) //Proceed if the user has requested to start a r
 {
     if (empty($session)) //Proceed if there's no remote session running
     {
+	if (filter_var($_POST['remoteip'], FILTER_VALIDATE_IP))
+	{
+
         $remotesession = json_decode(call_online_api($token, 'POST', '/server/bmc/session', null, array('server_id'=>$params['serverusername'], 'ip' => htmlentities(strip_tags($_POST['remoteip']))))); //Send the command to the api to start the session
         $message = "<div class='alert-message success'><p>The remote session is being opened.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
-    }
+    }else {
+	    $message = "<div class='alert-message error'><p>The IP address you have entered is not valid.<a href='#' class='close'>&times;</a></p></div>"; //Show this message if there's a remote session already open
+    
+	}
+	}
     else
     {
         $message = "<div class='alert-message error'><p>There is a remote session already open.<a href='#' class='close'>&times;</a></p></div>"; //Show this message if there's a remote session already open
@@ -276,7 +299,7 @@ if ($_POST['reverse'] && !empty($_SESSION['ipreverse'])) //Proceed if the user r
 {
     if (json_decode(call_online_api($token, 'POST', '/server/ip/edit', null, array(
 	 "address" => $_SESSION['ipreverse'],
-	 "reverse" => $_POST['reverse']))) === true) //Send the command to the api, proceed if succeeded
+	 "reverse" => htmlentities(strip_tags($_POST['reverse']))))) === true) //Send the command to the api, proceed if succeeded. There's no need to sanitize the reverse variable; it's passed to online.net, but we are going to remove and replace unnecessary tags, there is no domain with tags.
     {
         $message = "<div class='alert-message success'><p>The reverse was successfully updated.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
         unset($_SESSION['ipreverse']); //Remove the selected IP from the session (this is a server value, so that the user can not hijack it)
@@ -288,6 +311,10 @@ if ($_POST['reverse'] && !empty($_SESSION['ipreverse'])) //Proceed if the user r
 }
 else if ($_POST['vmactype'] && !empty($_SESSION['ipmac'])) //Proceed if requested to generate a virtual MAC
 {
+    if ($_POST['vmactype'] != "xen" && $_POST['vmactype'] != "kvm" && $_POST['vmactype'] != "vmware") //Proceed if the virtual mac type is not known
+    {
+        $_POST['vmactype'] = "vmware"; //Set the virtual mac type to vmware
+    }
     $request =json_decode(call_online_api($token, 'POST', '/server/failover/generateMac', null, array(
 	 "address" => $_SESSION['ipmac'],
 	 "type" => htmlentities(strip_tags($_POST['vmactype']))))); //Forward the command to the API
@@ -358,7 +385,7 @@ else if ($_POST['removevmac'] && !empty($_SESSION['ipmac'])) //Proceed if a requ
         }
         if ($valid) //Proceed if the user owns this IP address
 		{
-            $_SESSION['ipreverse'] = htmlentities(strip_tags($_GET['ip'])); //Save the ipreverse for the POST request - we don't want this to be hijacked, so we don't use the "hidden" fields (notice the quotes)
+            $_SESSION['ipreverse'] = htmlentities(strip_tags($_GET['ip'])); //Save the ipreverse for the POST request - we don't want this to be hijacked, so we don't use the "hidden" fields (notice the quotes). This is some sort of sanitization 
             $network .= "<h3>Edit reverses</h3><hr style='width:50%;'><p>Please enter the new reverse for <b>". htmlentities(strip_tags($_GET['ip'])) ."</b>: <form method='post' class='form-horizontal'><input type='text' value='" . $currentreverse."' name='reverse'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form></p><hr style='width:50%;'>";
 		}
     }
@@ -544,8 +571,24 @@ $rescuecreds = (array) $decodedinfo["rescue_credentials"]; //Get the rescue cred
 
 if (!empty($_POST['rescue_image'])) //Proceed if the user requested to start a new rescue session
 {
-    $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>htmlentities(strip_tags($_POST['rescue_image']))))); //Start a rescue session with the selected image
-    $message = "<div class='alert-message success'><p>Your server has successfully booted into rescue mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
+    $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve available rescue images
+	$valid = false; //This will be used to validate the rescue image requested
+    foreach($rescueinfo as $value) //Retrieve the available rescue images and show them into a dropdown field
+	{
+	    if ($value == $_POST['rescue_image']) //Proceed if the rescue image is found within the available rescue images
+		{
+		    $valid = true; //Set valid to true
+		}
+	}
+	if ($valid) //Proceed if the rescue image is found within the available rescue images
+	{
+        $rescuedetails = (array) json_decode(call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>htmlentities(strip_tags($_POST['rescue_image']))))); //Start a rescue session with the selected image
+        $message = "<div class='alert-message success'><p>Your server has successfully booted into rescue mode.<a href='#' class='close'>&times;</a></p></div>"; //Show this message
+    }
+	else
+	{
+	    $message = "<div class='alert-message error'><p>The rescue image you have selected is invalid. If the problem continutes, please notify support.<a href='#' class='close'>&times;</a></p></div>";
+	}
 }
 else if (!empty($_POST['normal_mode'])) //Proceed if the user requested to boot into normal mode
 {
@@ -554,7 +597,7 @@ else if (!empty($_POST['normal_mode'])) //Proceed if the user requested to boot 
 }
 else if (!empty($_POST['hostname'])) //Proceed if the user requested to change their hostname
 {
-    if (call_online_api($token, 'PUT', '/server/'.$params["serverusername"],null,array('hostname'=>htmlentities(strip_tags($_POST['hostname'])))) == "true") //Proceed if the requested hostname is accepted
+    if (call_online_api($token, 'PUT', '/server/'.$params["serverusername"],null,array('hostname'=>htmlentities(strip_tags($_POST['hostname'])))) == "true") //Proceed if the requested hostname is accepted. No sanitization is required here, online.net handles that.
 	{
         $message = "<div class='alert-message success'><p>Your hostname has been successfully updated.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
 	}
