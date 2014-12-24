@@ -165,7 +165,7 @@ $rescuecreds = (array) $decodedinfo["rescue_credentials"];
 
 if(file_exists("modules/servers/online/img/".$osinfo["name"].".png")) //Proceed if there's a PNG image for the operating system name
 {
-    $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='/modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
+    $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
 }
 $hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
 
@@ -628,7 +628,7 @@ $rescuecreds = (array) $decodedinfo["rescue_credentials"];
 
 if(file_exists("modules/servers/online/img/".$osinfo["name"].".png")) //Proceed if there's a PNG image for the operating system name
 {
-    $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='/modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
+    $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
 }
 $hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
 

@@ -1,5 +1,5 @@
 {literal}
-    <link rel="stylesheet" type="text/css" media="all" href="/modules/servers/online/css/online.css">
+    <link rel="stylesheet" type="text/css" media="all" href="modules/servers/online/css/online.css">
 {/literal}
 <h1 id="cntrlhead">Control Panel</h1>
 <hr>
