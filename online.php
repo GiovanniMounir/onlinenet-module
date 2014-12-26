@@ -238,10 +238,17 @@ if (!empty($_POST['remoteip'])) //Proceed if the user has requested to start a r
 	if (filter_var($_POST['remoteip'], FILTER_VALIDATE_IP))
 	{
 
-        $remotesession = json_decode(call_online_api($token, 'POST', '/server/bmc/session', null, array('server_id'=>$params['serverusername'], 'ip' => htmlentities(strip_tags($_POST['remoteip']))))); //Send the command to the api to start the session
-        $message = "<div class='alert-message success'><p>The remote session is being opened.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
-    }else {
-	    $message = "<div class='alert-message error'><p>The IP address you have entered is not valid.<a href='#' class='close'>&times;</a></p></div>"; //Show this message if there's a remote session already open
+        $remotesession = (array) json_decode(call_online_api($token, 'POST', '/server/bmc/session', null, array('server_id'=>$params['serverusername'], 'ip' => htmlentities(strip_tags($_POST['remoteip']))))); //Send the command to the api to start the session
+        if (!empty($remotesession['error']))
+		{
+		$remotesession['error'] = str_replace("Impossible to create", "You cannot create", $remotesession['error']); //Nothing is impossible, the error message is misleading		
+		$message = "<div class='alert-message error'><p>".$remotesession['error']."<a href='#' class='close'>&times;</a></p></div>"; //Show this message if an error occurred
+		}else {
+		$message = "<div class='alert-message success'><p>The remote session is being opened.<a href='#' class='close'>&times;</a></p></div>"; //Show this message as a result of success
+        }
+	
+	}else {
+	    $message = "<div class='alert-message error'><p>The IP address you have entered is not valid.<a href='#' class='close'>&times;</a></p></div>"; //Show this message if the IP is invalid
     
 	}
 	}
