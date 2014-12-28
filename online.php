@@ -167,7 +167,7 @@ if(file_exists("modules/servers/online/img/".$osinfo["name"].".png")) //Proceed 
 {
     $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
 }
-$hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
+$hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
 
 if ($decodedinfo["boot_mode"] == "normal") //Proceed only if the current state is normal boot
 {
@@ -182,11 +182,11 @@ if ($decodedinfo["boot_mode"] == "normal") //Proceed only if the current state i
 		//Append the human readable valuable to the dropdown field
         $rescue .= "<option value='".$value."'>".$hvalue."</option>";
     }
-    $rescue .= "</select><br><br><input style='margin-left:5px;' type='submit' value='Boot' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //Give the user the option to submit the form
+    $rescue .= "</select><br><br><input style='margin-left:5px;' type='submit' value='Boot' class='btn btn-primary'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //Give the user the option to submit the form
 }
 else //Proceed if the current state is not normal boot
 {
-    $rescue = "<h3>Boot into rescue mode</h3><hr style='width:50%;'><p>The system is now running under a rescue image.</p><br><form method='post'><input type='submit' name='normal_mode' class='btn btn-primary' value='Boot into normal mode'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form><hr style='width:50%;'>"; //Notify the user that a rescue session is already running
+    $rescue = "<h3>Boot into rescue mode</h3><hr style='width:50%;'><p>The system is now running under a rescue image.</p><br><form method='post'><input type='submit' name='normal_mode' class='btn btn-primary' value='Boot into normal mode'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form><hr style='width:50%;'>"; //Notify the user that a rescue session is already running
 }
 
 $state = "<p><b>Operating System</b>: " . $osimage . ucfirst($osinfo["name"]) . " " . $osinfo["version"] . "</p>"; //Append the operating system name and version
@@ -194,7 +194,7 @@ $state .= "<p><b>Hostname</b>: " . $decodedinfo["hostname"]; //Append the hostna
 
 if ($_GET['c'] != "hostname") //Proceed if the user did not request to change their hostname
 {
-    $state .= " <a class='btn btn-mini' href='/clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=hostname'>Change</a></p>"; //Show a change button next to the hostname
+    $state .= " <a class='btn btn-mini' href='clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=hostname'>Change</a></p>"; //Show a change button next to the hostname
 }
 else //Proceed if the user requested to change their hostname
 {
@@ -204,7 +204,7 @@ $state .= "<p><b>Boot Mode</b>: " . ucfirst($decodedinfo["boot_mode"]); //Append
 
 if ($decodedinfo["boot_mode"] == "normal" && $_GET['c'] != "rescue") //Proceed if the boot mode is normal and the user did not request to boot into rescue
 {
-    $state .= " <a class='btn btn-mini' href='/clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=rescue'>Rescue</a></p>"; //Show a rescue button next to the mode
+    $state .= " <a class='btn btn-mini' href='clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=rescue'>Rescue</a></p>"; //Show a rescue button next to the mode
     $state .= "<p><b>Last Reboot</b>: " . str_replace(".000Z", "", str_replace("T", " ", $decodedinfo["last_reboot"])); //Show when the server was last reooted
     $state .= "<br><br><p><form method='post'><input type='submit' name='reboot' class='btn btn-danger' value='Reboot'></input></form></p>"; //Give the user the option to reboot their server
 }
@@ -273,7 +273,7 @@ $bmcinfo = (array) $decodedinfo["bmc"]; $session = $bmcinfo["session_key"];
 if (empty($session)) //Show these if there's no session running
 {
     $remote = "<p>There are no remote sessions currently opened.</p><br>";
-    $remote .= "<p>To start a remote session, please enter the IP address which will be granted the rights to access the remote console: </p><form method='post' class='form-horizontal'><input type='text' placeholder='IP Address' name='remoteip' value='".htmlentities(strip_tags($_SERVER['REMOTE_ADDR']))."'></input><br><br><input type='submit' class='btn btn-primary' value='Start a session'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=remote'>Cancel</a></form><br>";
+    $remote .= "<p>To start a remote session, please enter the IP address which will be granted the rights to access the remote console: </p><form method='post' class='form-horizontal'><input type='text' placeholder='IP Address' name='remoteip' value='".htmlentities(strip_tags($_SERVER['REMOTE_ADDR']))."'></input><br><br><input type='submit' class='btn btn-primary' value='Start a session'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=remote'>Cancel</a></form><br>";
     $remote .= "<p style='color:#6F6F6F'><i>If you aren't sure, leave the current value and connect directly.</i></p>";
 }
 else if (!empty($session)) //Otherwise, show the remote session credentials
@@ -393,7 +393,7 @@ else if ($_POST['removevmac'] && !empty($_SESSION['ipmac'])) //Proceed if a requ
         if ($valid) //Proceed if the user owns this IP address
 		{
             $_SESSION['ipreverse'] = htmlentities(strip_tags($_GET['ip'])); //Save the ipreverse for the POST request - we don't want this to be hijacked, so we don't use the "hidden" fields (notice the quotes). This is some sort of sanitization 
-            $network .= "<h3>Edit reverses</h3><hr style='width:50%;'><p>Please enter the new reverse for <b>". htmlentities(strip_tags($_GET['ip'])) ."</b>: <form method='post' class='form-horizontal'><input type='text' value='" . $currentreverse."' name='reverse'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form></p><hr style='width:50%;'>";
+            $network .= "<h3>Edit reverses</h3><hr style='width:50%;'><p>Please enter the new reverse for <b>". htmlentities(strip_tags($_GET['ip'])) ."</b>: <form method='post' class='form-horizontal'><input type='text' value='" . $currentreverse."' name='reverse'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form></p><hr style='width:50%;'>";
 		}
     }
 	
@@ -430,7 +430,7 @@ if ($_GET['c'] == "editmac" && !empty($_GET['ip'])) //Proceed if a request to ed
             {
                 $network .="</form><br><p>or duplicate an existing virtual MAC:</p><form method='post' class='form-horizontal'>Duplicate from: <select name='ipfrom'><br><br>".$list."</select><br><br><input type='submit' class='btn btn-primary' value='Duplicate'></input> "; //Give the user the option to duplicate the MAC address from these extra IP addresses
             }
-            $network .= "<a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form><hr style='width:50%;'>"; //Close the form and give the option to cancel or hide the interface
+            $network .= "<a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network'>Cancel</a></form><hr style='width:50%;'>"; //Close the form and give the option to cancel or hide the interface
         }
         else //Proceed if the current virtual MAC is not empty - give the user the option to remove the current instead
         {
@@ -456,22 +456,22 @@ for ($i = 0; $i < count($net); $i++) //Loop through the network data
     $index = (array)$net[$i]; //Convert to array
     if (empty($index['reverse'])) //Proceed if the reverse of the IP is empty - there's no reverse: give the user the option to add a new reverse
     {
-        $index['reverse'] = "<a href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editreverse&ip=".$index['address']."'>Add reverse</a>";
+        $index['reverse'] = "<a href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editreverse&ip=".$index['address']."'>Add reverse</a>";
     }
     else //Otherwise, proceed if it's not empty - give the user the option to modify the current reverse 
     {
-        $index['reverse'] .= " <a href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editreverse&ip=".$index['address']."'> Edit</a>";
+        $index['reverse'] .= " <a href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editreverse&ip=".$index['address']."'> Edit</a>";
  
     }
     if ($index['type'] == 'failover') //Proceed if the IP is a failover
     {
         if (empty($index['mac'])) //Proceed if there's no MAC - give the option to add a virutal MAC 
         {
-            $index['mac'] = "<a href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editmac&ip=".$index['address']."'>Add virtual MAC</a>";
+            $index['mac'] = "<a href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editmac&ip=".$index['address']."'>Add virtual MAC</a>";
         }
         else //PRoceed if there's a MAC address assigned to this IP - give the option to edit the current MAC
 	    {
-            $index['mac'] .= " <a href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editmac&ip=".$index['address']."'>Edit</a>";
+            $index['mac'] .= " <a href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=network&c=editmac&ip=".$index['address']."'>Edit</a>";
         }
     }
     $network .= "<tr><td>". $index['address']."</td><td>".strtoupper(str_replace("failover", "extra", $index['type']))."</td><td>".$index['reverse']."</td><td>".$index['mac']."</td></tr>"; //Output the information into a table row
@@ -637,7 +637,7 @@ if(file_exists("modules/servers/online/img/".$osinfo["name"].".png")) //Proceed 
 {
     $osimage = "<img style='vertical-align: middle; margin-left:5px;' src='modules/servers/online/img/".$osinfo["name"] .".png'></img> "; //Show the image in the client area
 }
-$hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
+$hostname = "<h3>Change your hostname</h3><hr style='width:50%;'><p>Please enter your new hostname: <form method='post' class='form-horizontal'><input type='text' value='".$decodedinfo['hostname']."' name='hostname'></input><br><br><input type='submit' value='Change' class='btn btn-primary'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //This is visible when a hostname change is requested - it's always passed to the client area, but visible only when requested
 
 if ($decodedinfo["boot_mode"] == "normal") //Proceed only if the current state is normal boot
 {
@@ -652,11 +652,11 @@ if ($decodedinfo["boot_mode"] == "normal") //Proceed only if the current state i
 		//Append the human readable valuable to the dropdown field
         $rescue .= "<option value='".$value."'>".$hvalue."</option>";
     }
-    $rescue .= "</select><br><br><input style='margin-left:5px;' type='submit' value='Boot' class='btn btn-primary'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //Give the user the option to submit the form
+    $rescue .= "</select><br><br><input style='margin-left:5px;' type='submit' value='Boot' class='btn btn-primary'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form></p><hr style='width:50%;'>"; //Give the user the option to submit the form
 }
 else //Proceed if the current state is not normal boot
 {
-    $rescue = "<h3>Boot into rescue mode</h3><hr style='width:50%;'><p>The system is now running under a rescue image.</p><br><form method='post'><input type='submit' name='normal_mode' class='btn btn-primary' value='Boot into normal mode'></input> <a class='btn' href='/clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form><hr style='width:50%;'>"; //Notify the user that a rescue session is already running
+    $rescue = "<h3>Boot into rescue mode</h3><hr style='width:50%;'><p>The system is now running under a rescue image.</p><br><form method='post'><input type='submit' name='normal_mode' class='btn btn-primary' value='Boot into normal mode'></input> <a class='btn' href='clientarea.php?action=productdetails&id=".$params['serviceid']."&b=state'>Cancel</a></form><hr style='width:50%;'>"; //Notify the user that a rescue session is already running
 }
 
 $state = "<p><b>Operating System</b>: " . $osimage . ucfirst($osinfo["name"]) . " " . $osinfo["version"] . "</p>"; //Append the operating system name and version
@@ -664,7 +664,7 @@ $state .= "<p><b>Hostname</b>: " . $decodedinfo["hostname"]; //Append the hostna
 
 if ($_GET['c'] != "hostname") //Proceed if the user did not request to change their hostname
 {
-    $state .= " <a class='btn btn-mini' href='/clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=hostname'>Change</a></p>"; //Show a change button next to the hostname
+    $state .= " <a class='btn btn-mini' href='clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=hostname'>Change</a></p>"; //Show a change button next to the hostname
 }
 else //Proceed if the user requested to change their hostname
 {
@@ -674,7 +674,7 @@ $state .= "<p><b>Boot Mode</b>: " . ucfirst($decodedinfo["boot_mode"]); //Append
 
 if ($decodedinfo["boot_mode"] == "normal" && $_GET['c'] != "rescue") //Proceed if the boot mode is normal and the user did not request to boot into rescue
 {
-    $state .= " <a class='btn btn-mini' href='/clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=rescue'>Rescue</a></p>"; //Show a rescue button next to the mode
+    $state .= " <a class='btn btn-mini' href='clientarea.php?action=productdetails&id=". $params['serviceid'] . "&b=state&c=rescue'>Rescue</a></p>"; //Show a rescue button next to the mode
     $state .= "<p><b>Last Reboot</b>: " . str_replace(".000Z", "", str_replace("T", " ", $decodedinfo["last_reboot"])); //Show when the server was last reooted
     $state .= "<br><br><p><form method='post'><input type='submit' name='reboot' class='btn btn-danger' value='Reboot'></input></form></p>"; //Give the user the option to reboot their server
 }
