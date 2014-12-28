@@ -4,10 +4,10 @@
 <h1 id="cntrlhead">Control Panel</h1>
 <hr>
 <ul class="nav nav-pills nav-stacked">
-              <li{php} if ($_GET['b'] == 'state' || empty($_GET['b'])) { echo ' class="active"'; } {/php}><a href="/clientarea.php?action=productdetails&id={$srvid}&b=state">State</a></li>
-          	  <li{php} if ($_GET['b'] == 'remote') { echo ' class="active"'; } {/php}><a href="/clientarea.php?action=productdetails&id={$srvid}&b=remote">Remote Console</a></li>
-			  <li{php} if ($_GET['b'] == 'network') { echo ' class="active"'; } {/php}><a href="/clientarea.php?action=productdetails&id={$srvid}&b=network">Network</a></li>
-			  <li{php} if ($_GET['b'] == 'raid') { echo ' class="active"'; } {/php}><a href="/clientarea.php?action=productdetails&id={$srvid}&b=raid">RAID</a></li>
+              <li{php} if ($_GET['b'] == 'state' || empty($_GET['b'])) { echo ' class="active"'; } {/php}><a href="clientarea.php?action=productdetails&id={$srvid}&b=state">State</a></li>
+          	  <li{php} if ($_GET['b'] == 'remote') { echo ' class="active"'; } {/php}><a href="clientarea.php?action=productdetails&id={$srvid}&b=remote">Remote Console</a></li>
+			  <li{php} if ($_GET['b'] == 'network') { echo ' class="active"'; } {/php}><a href="clientarea.php?action=productdetails&id={$srvid}&b=network">Network</a></li>
+			  <li{php} if ($_GET['b'] == 'raid') { echo ' class="active"'; } {/php}><a href="clientarea.php?action=productdetails&id={$srvid}&b=raid">RAID</a></li>
 			  
             </ul>
 			<div class="ccontent">
