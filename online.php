@@ -73,7 +73,7 @@ function online_SuspendAccount($params) {
 	}
 	//Add an entry to the todo list field to notify the administrators (optional and can be removed)
 $table = "tbltodolist";
-$values = array("title"=>"ONLINE.NET - Service Suspension","description"=>"Service ID # " . $params["serviceid"] ." was suspended.","status"=>"Pending");
+$values = array("title"=>"ONLINE.NET - Service Suspension","description"=>"Service ID # " . $params["serviceid"] ." was suspended.","status"=>"Pending", "date" => date('Y/m/d'));
 $newid = insert_query($table,$values);
 //End add an entry
 
