@@ -67,10 +67,11 @@ function online_SuspendAccount($params) {
     $server = $params["server"]; //Check if the service is linked to a server
     $serverid = $params["serverusername"]; //Get the server ID from the username field
     $token = $params["serveraccesshash"]; //This is online.net's API private token for the user owning the dedicated server, retrieve it from server access hash field
-	if ($server) //Proceed if linked to a server
-	{
-        call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>'ubuntu-12.04_amd64')); //Boots into rescue mode
-	}
+    if ($server) //Proceed if linked to a server
+    {
+	$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]));
+        call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>$rescueinfo[0])); //Boots into rescue mode
+    }
 	//Add an entry to the todo list field to notify the administrators (optional and can be removed)
 $table = "tbltodolist";
 $values = array("title"=>"ONLINE.NET - Service Suspension","description"=>"Service ID # " . $params["serviceid"] ." was suspended.","status"=>"Pending", "date" => date('Y/m/d'));
