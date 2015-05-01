@@ -1,7 +1,6 @@
 <?php
 /*
 Copyright (c) 2014 Verelox
-Developed by Giovanni Mounir (@GiovanniMounir on GitHub), James Daniel(@daeneeil on GitHub) and Erikku Nakahara(yam0r1). Not affiliated with online.net.
 This is an open source project available under the MIT license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
