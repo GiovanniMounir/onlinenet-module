@@ -68,7 +68,7 @@ function online_SuspendAccount($params) {
     $token = $params["serveraccesshash"]; //This is online.net's API private token for the user owning the dedicated server, retrieve it from server access hash field
     if ($server) //Proceed if linked to a server
     {
-	$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]));
+	$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]), true);
         call_online_api($token, 'POST', '/server/boot/rescue/'.$params["serverusername"],null,array('image'=>$rescueinfo[0])); //Boots into rescue mode
     }
 	//Add an entry to the todo list field to notify the administrators (optional and can be removed)
@@ -101,14 +101,14 @@ if ($_GET['b'] == "state" || empty($_GET['b'])) //Proceed if the selected menu i
 {
 
 $serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Retrieve the infortmation we have for this server ID from the API (Power State, OS, etc)
-$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve the rescue images available for this server ID from the API (ubuntu, Windows PE, etc)
+$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]), true); //Retrieve the rescue images available for this server ID from the API (ubuntu, Windows PE, etc)
 $decodedinfo = (array) $serverinfo; //Convert the retrieved server data to an array: The API passes it as an stdObject
 $osinfo = (array) $decodedinfo["os"]; //Convert the retrieved rescue images data to an array: The API passes it as an stdObject
 $rescuecreds = (array) $decodedinfo["rescue_credentials"]; //Get the rescue credentials from the server info, if any
 
 if (!empty($_POST['rescue_image'])) //Proceed if the user requested to start a new rescue session
 {
-    $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve available rescue images
+    $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]), true); //Retrieve available rescue images
 	$valid = false; //This will be used to validate the rescue image requested
     foreach($rescueinfo as $value) //Retrieve the available rescue images and show them into a dropdown field
 	{
@@ -571,14 +571,14 @@ $_GET['b'] = "state"; //Set the menu item to 'state'
 
 // -- start sate --
 $serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"])); //Retrieve the infortmation we have for this server ID from the API (Power State, OS, etc)
-$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve the rescue images available for this server ID from the API (ubuntu, Windows PE, etc)
+$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]), true); //Retrieve the rescue images available for this server ID from the API (ubuntu, Windows PE, etc)
 $decodedinfo = (array) $serverinfo; //Convert the retrieved server data to an array: The API passes it as an stdObject
 $osinfo = (array) $decodedinfo["os"]; //Convert the retrieved rescue images data to an array: The API passes it as an stdObject
 $rescuecreds = (array) $decodedinfo["rescue_credentials"]; //Get the rescue credentials from the server info, if any
 
 if (!empty($_POST['rescue_image'])) //Proceed if the user requested to start a new rescue session
 {
-    $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"])); //Retrieve available rescue images
+    $rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]), true); //Retrieve available rescue images
 	$valid = false; //This will be used to validate the rescue image requested
     foreach($rescueinfo as $value) //Retrieve the available rescue images and show them into a dropdown field
 	{
@@ -627,7 +627,7 @@ else if (!empty($_POST['reboot'])) //Proceed if the user requested to reboot the
 
 //Resynchronize - retrieve the same data again
 $serverinfo = json_decode(call_online_api($token, 'GET', '/server/'.$params["serverusername"]));
-$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]));
+$rescueinfo = json_decode(call_online_api($token, 'GET', '/server/rescue_images/'.$params["serverusername"]), true);
 $decodedinfo = (array) $serverinfo;
 $osinfo = (array) $decodedinfo["os"];
 $rescuecreds = (array) $decodedinfo["rescue_credentials"];
