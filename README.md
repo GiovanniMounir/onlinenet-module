@@ -5,7 +5,7 @@ License
 
 This is a WHMCS module for ONLINE.NET resellers that gives the client the ability to control their dedicated servers and automates the termination and suspension of the dedicated servers assigned to the client.
 
-This work is available under the MIT license; developed for Verelox by Giovanni Mounir and James Daniel. We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with ONLINE.NET.
+This work is available under the MIT license; developed by Giovanni Mounir and James Daniel. We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with ONLINE.NET.
 
 Features
 ================
@@ -18,7 +18,7 @@ Features
 Installation
 ================
 
-To install the module, click [here](https://github.com/Verelox/onlinenet-module/archive/master.zip) to download the latest release in a zip format, unzip it and upload the compressed files to your server at <code>WHMCS_MAIN_DIRECTORY/modules/servers/online/</code> where <code>WHMCS_MAIN_DIRECTORY</code> is your WHMCS directory and <code>/modules/servers/online/</code> is the folder you should create. The folder is case sensitive.
+To install the module, click [here](https://github.com/GiovanniMounir/onlinenet-module/archive/master.zip) to download the latest release in a zip format, unzip it and upload the compressed files to your server at <code>WHMCS_MAIN_DIRECTORY/modules/servers/online/</code> where <code>WHMCS_MAIN_DIRECTORY</code> is your WHMCS directory and <code>/modules/servers/online/</code> is the folder you should create. The folder is case sensitive.
 
 Configuration
 ================
@@ -28,4 +28,4 @@ After uploading the files required for the module to operate, open your administ
 Support
 ================
 
-If you notice bugs or something wrong, you may feel free to report the issue by clicking [here](https://github.com/Verelox/onlinenet-module/issues/new). You may follow the same link if you would like to suggest a feature, too!
+If you notice bugs or something wrong, you may feel free to report the issue by clicking [here](https://github.com/GiovanniMounir/onlinenet-module/issues/new). You may follow the same link if you would like to suggest a feature, too!
