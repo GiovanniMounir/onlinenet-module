@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2014 Verelox
+Copyright (c) 2017 giovannimounir.net
 This is an open source project available under the MIT license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
