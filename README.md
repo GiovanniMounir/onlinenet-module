@@ -1,4 +1,4 @@
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/GiovanniMounir)
+Donate through BTC: 1BUDZWput2E4G5DbN2Z3esYhNj7GRoyGHD
 
 License
 ================
